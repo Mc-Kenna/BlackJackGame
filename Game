@@ -43,14 +43,14 @@ computer_turn = True
 # check for blackjack (one ace + one 10 card)
 # if both players have blackjacks, computer wins
 
-if sum(computer_hand) == 21:
+if game_on == True and sum(computer_hand) == 21:
     game_on = False
     player_turn = False
     computer_turn = False
     print("BlackJack! Computer Wins!")
     print(f"Computer's Hand: {computer_hand}")
 
-if sum(player_hand) == 21:
+if game_on == True and sum(player_hand) == 21:
     game_on = False
     player_turn = False
     computer_turn = False
