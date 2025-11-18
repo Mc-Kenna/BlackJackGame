@@ -1,0 +1,115 @@
+import random
+
+logo = r"""
+.------.            _     _            _    _            _    
+|A_  _ |.          | |   | |          | |  (_)          | |   
+|( \/ ).-----.     | |__ | | __ _  ___| | ___  __ _  ___| | __
+| \  /|K /\  |     | '_ \| |/ _` |/ __| |/ / |/ _` |/ __| |/ /
+|  \/ | /  \ |     | |_) | | (_| | (__|   <| | (_| | (__|   < 
+`-----| \  / |     |_.__/|_|\__,_|\___|_|\_\ |\__,_|\___|_|\_\\
+      |  \/ K|                            _/ |                
+      `------'                           |__/           
+"""
+
+
+cards = [11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10]
+
+#initial deal
+def deal(a):
+    a.append(cards[random.randint(0,12)])
+    a.append(cards[random.randint(0,12)])
+    return a
+
+
+computer_hand = []
+player_hand = []
+
+computer_hand = deal(computer_hand)
+player_hand = deal(player_hand)
+
+print(logo)
+print("Welcome to Kane's Casino! Feeling Lucky?\n")
+print(f"Computer's First Card: {computer_hand[1]}")
+print(f"Player's Hand: {player_hand}\n")
+
+def draw(b):
+    b.append(cards[random.randint(0,12)])
+    return b
+
+game_on = True
+player_turn = True
+computer_turn = True
+
+# check for blackjack (one ace + one 10 card)
+# if both players have blackjacks, computer wins
+
+if sum(computer_hand) == 21:
+    game_on = False
+    player_turn = False
+    computer_turn = False
+    print("BlackJack! Computer Wins!")
+    print(f"Computer's Hand: {computer_hand}")
+
+if sum(player_hand) == 21:
+    game_on = False
+    player_turn = False
+    computer_turn = False
+    print("BlackJack! You Win!")
+    print(f"Player's Hand: {player_hand}")
+
+# player turn loop
+
+while player_turn == True:
+    player_draw = input("Would you like to draw another card? Please type 'yes' or 'no'.\n")
+    if player_draw == "yes":
+        player_hand = draw(player_hand)
+    else:
+        player_turn = False
+    if sum(player_hand) > 21:
+        # aces high vs aces low
+        if 11 in player_hand:
+            player_hand.remove(11)
+            player_hand.append(1)
+        else:
+            print("You Bust! You Lose!")
+            game_on = False
+            player_turn = False
+            computer_turn = False
+    print(f"Player's Hand: {player_hand}")
+
+# computer turn loop
+while computer_turn == True:
+    if sum(computer_hand) <= 16:
+        computer_hand = draw(computer_hand)
+        print(f"computer: {computer_hand}")
+    if sum(computer_hand) > 16:
+        computer_turn = False
+    if sum(computer_hand) > 21:
+        # aces high vs aces low
+        if 11 in computer_hand:
+            computer_hand.remove(11)
+            computer_hand.append(1)
+        else:
+            print("Computer Bust! You Win!")
+            game_on = False
+            player_turn = False
+            computer_turn = False
+
+# final score calculation
+# computer wins in a draw
+
+if game_on == True:
+    if sum(computer_hand) >= sum(player_hand):
+        print(f'''
+Final Scores:
+Computer: {sum(computer_hand)} 
+Player: {sum(player_hand)}
+
+Computer Wins!''')
+    else:
+        print(f'''
+Final Scores:
+Computer: {sum(computer_hand)} 
+Player: {sum(player_hand)}
+
+You Win!''')
